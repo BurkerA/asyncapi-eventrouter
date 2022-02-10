@@ -34,7 +34,7 @@ html = """
             function sendMessage(event) {
                 var input = document.getElementById("messageText")
                 var wsEvent = {"channel": "demo",
-                               "event": "msg",
+                               "event": "message",
                                "data": {"text": input.value},
                                }
                 ws.send(JSON.stringify(wsEvent))
@@ -59,8 +59,8 @@ class Text(BaseModel):
     text: str
 
 
-@asyncapi_app.subscribe(channel_name="demo", event_name="msg")
-def echo(data: Text):
+@asyncapi_app.subscribe(channel_name="demo", event_name="message")
+async def echo(data: Text):
     return repr(data)
 
 
@@ -69,8 +69,8 @@ async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     while True:
         content = await websocket.receive_text()
-        response = asyncapi_app.process(content)
-        await websocket.send_text(response)
+        await asyncapi_app.process(content)
+        await websocket.send_text(content)
 
 
 class PrettyJSONResponse(Response):

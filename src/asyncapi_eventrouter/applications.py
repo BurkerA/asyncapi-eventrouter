@@ -12,8 +12,11 @@ class Event(BaseModel):
 
 
 class Application:
-    def __init__(self):
+    def __init__(self, version="", title="", description=""):
         self.router = ChannelRouter()
+        self.version = version
+        self.title = title
+        self.description = description
 
     def register_subscription(
         self, channel_name: str, event_name: str, func: Callable[..., Coroutine]
@@ -34,6 +37,13 @@ class Application:
         )
 
     def schema(self):
-        out = {"asyncapi": "2.2.0"}
+        out = {
+            "asyncapi": "2.2.0",
+            "info": {
+                "version": self.version,
+                "title": self.title,
+                "description": self.description,
+            },
+        }
         out["channels"] = self.router.schema()
         return out

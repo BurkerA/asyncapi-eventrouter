@@ -21,10 +21,15 @@ The basic Websocket request/reply behavior should look nearly identical to the v
 ```
 {
     "asyncapi": "2.2.0",
+    "info": {
+        "version": "",
+        "title": "",
+        "description": ""
+    },
     "channels": {
         "demo": {
             "publish": {
-                "msg": {
+                "message": {
                     "payload": {
                         "title": "Text",
                         "type": "object",
